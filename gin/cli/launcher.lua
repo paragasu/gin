@@ -84,23 +84,39 @@ end
 
 -- gin runtime
 local function gin_runtime(nginx_content)
-    local gin_runtime = [[
-location / {
-            content_by_lua 'require(\"gin.core.router\").handler(ngx)';
-        }
-]]
+    local runtime_config = ''
+    if Gin.settings.www_root_dir == false then
+      runtime_config = [[
+      location / {
+        content_by_lua 'require(\"gin.core.router\").handler(ngx)';
+      }
+      ]]
+    else
+      runtime_config = [[
+      location / {
+        root ]] .. Gin.settings.www_root_dir .. [[ ;
+        index index.html index.htm; 
+        try_files $uri $uri/ @gin;
+      }
+
+      location @gin {
+        content_by_lua 'require(\"gin.core.router\").handler(ngx)';
+      }
+    ]]
+    end
+
     if Gin.settings.expose_api_console == true then
-        gin_runtime = gin_runtime .. [[
-        location /ginconsole {
-            content_by_lua 'require(\"gin.cli.api_console\").handler(ngx)';
-        }
-]]
+      runtime_config = runtime_config .. [[
+      location /ginconsole {
+          content_by_lua 'require(\"gin.cli.api_console\").handler(ngx)';
+      }
+    ]]
     end
 
     -- add db locations
-    gin_runtime = gin_runtime_databases(gin_runtime)
+    runtime_config = gin_runtime_databases(runtime_config)
 
-    return string.gsub(nginx_content, "{{GIN_RUNTIME}}", gin_runtime)
+    return string.gsub(nginx_content, "{{GIN_RUNTIME}}", runtime_config)
 end
 
 

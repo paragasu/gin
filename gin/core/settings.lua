@@ -10,6 +10,7 @@ local GinSettings = {}
 GinSettings.defaults = {
     development = {
         code_cache = false,
+        www_root_dir = false,
         port = 7200,
         expose_api_console = true
     },
@@ -17,17 +18,20 @@ GinSettings.defaults = {
     test = {
         code_cache = true,
         port = 7201,
+        www_root_dir = false,
         expose_api_console = false
     },
 
     production = {
         code_cache = true,
+        www_root_dir = false,
         port = 80,
         expose_api_console = false
     },
 
     other = {
         code_cache = true,
+        www_root_dir = false,
         port = 80,
         expose_api_console = false
     }
