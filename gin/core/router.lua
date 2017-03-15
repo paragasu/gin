@@ -32,7 +32,7 @@ local Router = {}
 local response_version_header = 'gin/'.. Gin.version
 
 -- accept header for application
-local accept_header_matcher = "^application/vnd." .. Application.name .. ".v(%d+)(.*)+json$"
+local accept_header_matcher = "application/vnd." .. Application.name .. ".v(%d+)(.*)+json$"
 
 
 local function create_request(ngx)
