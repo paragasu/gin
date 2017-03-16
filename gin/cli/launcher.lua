@@ -1,5 +1,6 @@
 -- dep
 local ansicolors = require 'ansicolors'
+local lfs = require 'lfs'
 
 -- gin
 local Gin = require 'gin.core.gin'
@@ -87,16 +88,19 @@ local function gin_runtime(nginx_content)
     local runtime_config = ''
     if Gin.settings.www_root_dir == false then
       runtime_config = [[
-      location / {
+  location / {
         content_by_lua 'require(\"gin.core.router\").handler(ngx)';
-      }
-      ]]
+  }
+
+  ]]
     else
+      local www_root_dir = lfs.currentdir() .. '/../' .. Gin.settings.www_root_dir
       runtime_config = [[
-      location / {
-        root ]] .. Gin.settings.www_root_dir .. [[ ;
-        index index.html index.htm; 
-        try_files $uri $uri/ @gin;
+
+  location / {
+          root ]] .. www_root_dir .. [[ ;
+          index index.html index.htm; 
+          try_files $uri $uri/ @gin;
       }
 
       location @gin {
