@@ -71,11 +71,13 @@ local function gin_runtime_databases(gin_runtime)
             local execute_location = postgresql_adapter.execute_location_for(db.options)
 
             gin_runtime = gin_runtime .. [[
+
         location = /]] .. execute_location .. [[ {
             internal;
             postgres_pass   ]] .. location .. [[;
             postgres_query  $echo_request_body;
         }
+
 ]]
         end
     end
@@ -97,23 +99,25 @@ local function gin_runtime(nginx_content)
       local www_root_dir = lfs.currentdir() .. '/../' .. Gin.settings.www_root_dir
       runtime_config = [[
 
-  location / {
+      location / {
           root ]] .. www_root_dir .. [[ ;
           index index.html index.htm; 
           try_files $uri $uri/ @gin;
       }
 
       location @gin {
-        content_by_lua 'require(\"gin.core.router\").handler(ngx)';
+          content_by_lua 'require(\"gin.core.router\").handler(ngx)';
       }
     ]]
     end
 
     if Gin.settings.expose_api_console == true then
       runtime_config = runtime_config .. [[
-      location /ginconsole {
+
+    location /ginconsole {
           content_by_lua 'require(\"gin.cli.api_console\").handler(ngx)';
-      }
+    }
+
     ]]
     end
 
