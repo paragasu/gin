@@ -1,14 +1,14 @@
 package = "gin"
-version = "0.2.0-2"
+version = "0.2.0-3"
 
 source = {
-    url = "git://github.com/ostinelli/gin.git"
+    url = "git://github.com/paragasu/gin.git"
 }
 
 description = {
     summary = "A fast, low-latency, low-memory footprint, web JSON-API framework with Test Driven Development helpers and patterns.",
     homepage = "http://gin.io",
-    maintainer = "Roberto Ostinelli <roberto@ostinelli.net>",
+    maintainer = "Jeffry L. <paragasu@gmail.com>",
     license = "MIT"
 }
 
